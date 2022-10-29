@@ -1,2 +1,2 @@
-mupdf "SampleDeck/website.PNG"
+mupdf "website.PNG"
 echo "answer 1"

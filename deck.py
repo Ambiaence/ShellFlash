@@ -1,4 +1,5 @@
 import os
+import copy
 import time
 import statistics
 from integral_mapper import IntegralMap
@@ -21,7 +22,23 @@ class Deck:
             ls.append(line[:-1]) #Last line ommited
 
         return ls
-        
+    def sortCardsByProficiency(self):  
+        cards = self.cards
+        numOfMissed = 0
+        sortedCards = copy.copy(cards);
+        for x in range(0, len(cards)):
+            if cards[x].proficiency.missed > 0:     
+                numOfMissed = numOfMissed + 1
+                sortedCards.insert(0, sortedCards.pop(x))
+
+        sortedCards[numOfMissed:] = sorted(sortedCards[numOfMissed:],key = lambda card : card.proficiency.avg , reverse = True)
+        self.cards = sortedCards
+
+    def printState(self):
+        os.system("clear")
+        for card in self.cards:
+            print("Name:", card.name, "Avg:", card.proficiency.avg, "Missed:", card.proficiency.missed)
+
     def loadCards(self, cardNames):
         for name in cardNames: 
             f = open(name, 'r')
@@ -71,7 +88,6 @@ class Card:
         self.answer = answer
         self.answerTime = None #The amount of time it takes to physically answer a question
         self.proficiency = Proficiency()
-        self.strangeness = 3 #How known a card is
     def printContents(self):
         print(self.name)
         print(self.question)
