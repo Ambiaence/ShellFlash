@@ -79,7 +79,7 @@ class Deck:
     def repCard(self, index):
         card = self.cards[index]
 
-        if card.answerTime == None:
+        if card.proficiency.answerTime == None:
             print("Please write the answer to gage a answering time. The answer will appear twice. The second time will be used to gage time")
             input("")
             os.system(card.answer)
@@ -87,7 +87,7 @@ class Deck:
             start = time.time()
             os.system(card.answer)
             input("")
-            card.answerTime = time.time() - start
+            card.proficiency.answerTime = time.time() - start
             return
 
         start = time.time()
@@ -101,7 +101,7 @@ class Deck:
             inp = input("Did you get it correct y/n")
         
         if inp == "y":
-            modifiedTime = (total - card.answerTime)
+            modifiedTime = (total - card.proficiency.answerTime)
             if modifiedTime < 3:
                 card.proficiency.newTime(3) 
             else:
@@ -123,7 +123,6 @@ class Card:
         self.name = name
         self.question = question
         self.answer = answer
-        self.answerTime = None #The amount of time it takes to physically answer a question
         self.proficiency = Proficiency()
     def printContents(self):
         print(self.name)
@@ -134,6 +133,7 @@ class Proficiency:
     def __init__(self):
         self.avg = None # Average of last three times
         self.missed = 3 # The number of correct answers before question is considered known
+        self.answerTime = None  
         self.__lastThreeTimes = []
 
     def newTime(self, time):
