@@ -1,0 +1,3 @@
+echo "Chain rule in both notations"
+mupdf ChaiRule.PNG
+

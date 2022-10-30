@@ -2,7 +2,9 @@ import os
 import copy
 import time
 import statistics
+import pickle
 from integral_mapper import IntegralMap
+from os.path import exists
 class Deck:
     def __init__(self):
         self.cards = []
@@ -11,6 +13,12 @@ class Deck:
         cardNames = self.loadCardListFromIndex()
         self.loadCards(cardNames)
 
+        if exists("save"):
+            self.save = self.loadSave()
+        else:
+            os.system("touch save") #Hacky way to do this not portable
+            self.save = self.createSave()
+        self.sortCardsByProficiency()
 
     def numOfCards(self):
         return len(self.cards)
@@ -34,6 +42,28 @@ class Deck:
         sortedCards[numOfMissed:] = sorted(sortedCards[numOfMissed:],key = lambda card : card.proficiency.avg , reverse = True)
         self.cards = sortedCards
 
+    def loadSave(self):
+        pickle_in = open("save", "rb")
+        save = pickle.load(pickle_in)
+
+        for card in self.cards:
+            for sav in save:
+                if sav.nameOfCard == card.name:
+                    print(sav.nameOfCard, "and", card.name)
+                    card.proficiency = sav.proficiencyOfCard
+
+    def createSave(self):
+        save = [] 
+        for card in self.cards:
+            save.append(Save(card.name, card.proficiency))
+        return save
+
+    def updateSaveFile(self):
+       self.save = self.createSave()
+       pickle_out = open("save", "wb") 
+       pickle.dump(self.save, pickle_out)
+       pickle_out.close()
+
     def printState(self):
         os.system("clear")
         for card in self.cards:
@@ -53,8 +83,10 @@ class Deck:
             print("Please write the answer to gage a answering time. The answer will appear twice. The second time will be used to gage time")
             input("")
             os.system(card.answer)
+            input("")
             start = time.time()
             os.system(card.answer)
+            input("")
             card.answerTime = time.time() - start
             return
 
@@ -80,6 +112,11 @@ class Deck:
 
         print(card.proficiency.avg)
         print(card.proficiency.missed)
+
+class Save:
+    def __init__(self, name, prof):
+        self.nameOfCard = name
+        self.proficiencyOfCard = prof
 
 class Card:
     def __init__(self, name, question, answer):

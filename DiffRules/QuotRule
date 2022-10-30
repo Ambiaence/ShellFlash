@@ -1,0 +1,3 @@
+echo "The Quotient Rule"
+mupdf QuotRule.PNG
+

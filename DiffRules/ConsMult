@@ -1,0 +1,3 @@
+echo "The constant multiple rule"
+mupdf ConsMult.PNG
+

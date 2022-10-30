@@ -1,0 +1,3 @@
+echo "Derivative of Logorithm"
+mupdf LogoFunc.PNG
+
