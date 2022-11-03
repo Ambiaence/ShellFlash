@@ -1,0 +1,3 @@
+echo "2^n theo"
+mupdf TwoN.PNG
+

@@ -1,0 +1,3 @@
+echo "Power Rules"
+mupdf PoweRule.PNG
+
